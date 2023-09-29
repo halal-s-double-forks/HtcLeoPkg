@@ -342,10 +342,13 @@ void htcleo_led_set_mode(uint8_t mode)
     */
 	uint8_t data[4];
 	
-	data[0] = 0;
-	data[1] = 0;
-	data[2] = 0;
-	data[3] = 0;
+	data[0] = 0x01;
+	data[1] = 0x0;
+	data[2] = 0x0;
+	data[3] = 0x0;
+	data[4] = 0x00;
+	data[5] = 0x00;
+	data[6] = 0x00;
 	
 	switch(mode) {
 		case 0x01:
@@ -358,7 +361,7 @@ void htcleo_led_set_mode(uint8_t mode)
 		default:
 			data[1] = 0x00;
 	}
-	microp_i2c_write(MICROP_I2C_WCMD_LED_CTRL, data, 2);
+	microp_i2c_write(MICROP_I2C_WCMD_LED_MODE, data, 7);
 }
 
 HTCLEO_MICROP_PROTOCOL gHtcLeoMicropProtocol = {

@@ -344,8 +344,8 @@ void htcleo_led_set_mode(uint8_t mode)
 	
 	data[0] = 0x01;
 	data[1] = 0x0;
-	data[2] = 0x0;
-	data[3] = 0x0;
+	data[2] = 0xFFFF >> 8;
+	data[3] = 0xFFFF & 0xFF;
 	data[4] = 0x00;
 	data[5] = 0x00;
 	data[6] = 0x00;

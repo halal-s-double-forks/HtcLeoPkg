@@ -5,6 +5,7 @@
 | Function      | Notes                                   | status |
 |---------------|-----------------------------------------|--------|
 | GPIO          | Based on cLK driver                     |   ✅   |
+<<<<<<< HEAD
 | SD Card       | Based on cLK driver, only reading works |   ❌   |
 | I2C           | Driver exists in cLK                    |   ❌   |
 | Panel         | Driver exists in cLK                    |   ❌   |
@@ -15,10 +16,6 @@
 
 ## Loading
 UEFI can be either chainloaded as a kernel from cLK, as well as flashed to boot directly from HSPL.
-
-## To-Do
-Test/fix loading linux
-Get to load ReactOS
 
 ## Credits
  - Cotulla and DFT for the work on HD2

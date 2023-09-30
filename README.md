@@ -5,7 +5,6 @@
 | Function      | Notes                                   | status |
 |---------------|-----------------------------------------|--------|
 | GPIO          | Based on cLK driver                     |   ✅   |
-<<<<<<< HEAD
 | SD Card       | Based on cLK driver, only reading works |   ❌   |
 | I2C           | Driver exists in cLK                    |   ❌   |
 | Panel         | Driver exists in cLK                    |   ❌   |

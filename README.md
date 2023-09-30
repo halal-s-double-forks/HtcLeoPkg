@@ -6,7 +6,7 @@
 |---------------|-----------------------------------------|--------|
 | GPIO          | Based on cLK driver                     |   ✅   |
 | SD Card       | Based on cLK driver, only reading works |   ❌   |
-| I2C           | Driver exists in cLK                    |   ❌   |
+| I2C           | Driver exists in cLK                    |   ✅   |
 | Panel         | Driver exists in cLK                    |   ❌   |
 | Charging      | Supported in cLK since 1.5.x            |   ❌   |
 | Battery Gauge | Supported in cLK since 1.5.x (needs i2c)|   ❌   |

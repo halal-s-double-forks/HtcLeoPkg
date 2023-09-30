@@ -342,37 +342,26 @@ void htcleo_led_set_mode(uint8_t mode)
     */
 	uint8_t data[7];
 	
-	data[0] = 0x02;
+	data[0] = 0x01;
 	data[1] = 0x0;
 	data[2] = 0xFFFF >> 8;
 	data[3] = 0xFFFF & 0xFF;
-	data[4] = 0x00;
-	data[5] = 0xFFFF >> 8;
-	data[6] = 0xFFFF & 0xFF;
+	data[4] = 0x0;
+	data[5] = 0x0;
+	data[6] = 0x0;
 	
 	switch(mode) {
 		case 0x01:
-			data[4] = 0x01;
+			data[1] = 0x01;
 			break;
 		case 0x02:
-			data[4] = 0x02;
+			data[1] = 0x02;
 			break;
 		case 0x00:
 		default:
-			data[4] = 0x00;
+			data[1] = 0x00;
 	}
 	microp_i2c_write(MICROP_I2C_WCMD_LED_MODE, data, 7);
-}
-
-void htcbravo_kp_led_brightness(uint8_t brightness)
-{
-        uint8_t data[4];
-
-        data[0] = 5;
-        data[1] = 0xFF ? 0xFF : brightness;
-        data[2] = (1 << 2) >> 8;
-        data[3] = 1 << 2;
-        microp_i2c_write(MICROP_I2C_WCMD_LED_PWM, data, 4);
 }
 
 HTCLEO_MICROP_PROTOCOL gHtcLeoMicropProtocol = {
@@ -402,7 +391,5 @@ MicroPDxeInitialize(
 
     // Turn led green as a test
     htcleo_led_set_mode(1);
-    // Turn on KP Leds
-    htcbravo_kp_led_brightness(100);
 	return Status;
 }

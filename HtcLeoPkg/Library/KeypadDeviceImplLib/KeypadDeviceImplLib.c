@@ -7,8 +7,11 @@
 #include <Library/KeypadDeviceImplLib.h>
 #include <Library/UefiLib.h>
 #include <Protocol/KeypadDevice.h>
+#include <Protocol/HtcLeoMicroP.h>
 
-#define HTCLEO_GPIO_KP_LED 48
+#define MICROP_I2C_WCMD_LED_PWM				0x25
+
+HTCLEO_MICROP_PROTOCOL  *gMicroP;
 
 typedef enum {
   KEY_DEVICE_TYPE_UNKNOWN,
@@ -89,6 +92,11 @@ KeypadDeviceImplConstructor(VOID)
 {
   UINTN                Index;
   KEY_CONTEXT_PRIVATE *StaticContext;
+  EFI_STATUS Status;
+
+  // Initialise MicroP
+  Status = gBS->LocateProtocol (&gHtcLeoMicropProtocolGuid, NULL, (VOID **)&gMicroP);
+  ASSERT_EFI_ERROR (Status);  
 
   // Reset all keys
   for (Index = 0; Index < (sizeof(KeyList) / sizeof(KeyList[0])); Index++) {
@@ -193,12 +201,17 @@ BOOLEAN timerRunning = FALSE;
 // Callback function to disable the GPIO after a certain time
 VOID EFIAPI DisableKeyPadLed(IN EFI_EVENT Event, IN VOID *Context)
 {
-    // Disable the GPIO
-    gpio_set(HTCLEO_GPIO_KP_LED, 0);
+    // Turn off KeyPad LED
+    UINT8 data[4];
+    data[0] = 5; // Fade Time (According To Kernel Source)
+    data[1] = 0; // Brightness
+    data[2] = (1 << 2) >> 8;
+    data[3] = 1 << 2;
+    gMicroP->Write(MICROP_I2C_WCMD_LED_PWM, data, 4);
     timerRunning = FALSE;
 }
 
-// Function to enable the GPIO and schedule the callback
+// Function to enable the KeyPad LED and schedule the callback
 VOID EnableKeypadLedWithTimer(VOID)
 {
     if (timerRunning) {
@@ -207,7 +220,12 @@ VOID EnableKeypadLedWithTimer(VOID)
         timerRunning = FALSE;
     }
 
-    gpio_set(HTCLEO_GPIO_KP_LED, 1);
+    UINT8 data[4];
+    data[0] = 5; // Fade Time (According To Kernel Source)
+    data[1] = 100; // Brightness
+    data[2] = (1 << 2) >> 8;
+    data[3] = 1 << 2;
+    gMicroP->Write(MICROP_I2C_WCMD_LED_PWM, data, 4);
     EFI_STATUS Status;
 
     Status = gBS->CreateEvent(

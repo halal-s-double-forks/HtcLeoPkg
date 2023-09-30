@@ -20,3 +20,5 @@
   KeypadDeviceHelperLib
   TimerLib
   
+[Protocols]
+  gHtcLeoMicropProtocolGuid

@@ -92,11 +92,7 @@ KeypadDeviceImplConstructor(VOID)
 {
   UINTN                Index;
   KEY_CONTEXT_PRIVATE *StaticContext;
-  EFI_STATUS Status;
 
-  // Initialise MicroP
-  Status = gBS->LocateProtocol (&gHtcLeoMicropProtocolGuid, NULL, (VOID **)&gMicroP);
-  ASSERT_EFI_ERROR (Status);  
 
   // Reset all keys
   for (Index = 0; Index < (sizeof(KeyList) / sizeof(KeyList[0])); Index++) {
@@ -167,6 +163,13 @@ KeypadDeviceImplConstructor(VOID)
 
 EFI_STATUS EFIAPI KeypadDeviceImplReset(KEYPAD_DEVICE_PROTOCOL *This)
 {
+  EFI_STATUS Status;
+ 
+  // Initialise MicroP
+  Status = gBS->LocateProtocol(&gHtcLeoMicropProtocolGuid, NULL, (VOID **)&gMicroP);
+
+  ASSERT_EFI_ERROR(Status);
+
   LibKeyInitializeKeyContext(&KeyContextPower.EfiKeyContext);
   KeyContextPower.EfiKeyContext.KeyData.Key.ScanCode = SCAN_ESC;
 
@@ -222,7 +225,7 @@ VOID EnableKeypadLedWithTimer(VOID)
 
     UINT8 data[4];
     data[0] = 5; // Fade Time (According To Kernel Source)
-    data[1] = 100; // Brightness
+    data[1] = 255; // Brightness
     data[2] = (1 << 2) >> 8;
     data[3] = 1 << 2;
     gMicroP->Write(MICROP_I2C_WCMD_LED_PWM, data, 4);
